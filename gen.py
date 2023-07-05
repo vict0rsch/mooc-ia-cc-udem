@@ -17,6 +17,7 @@ template = dedent(
 #SBATCH --gres={gres}
 
 module load anaconda3 cuda/11.7
+conda activate {env}
 
 cd {codeloc}
 
@@ -41,6 +42,7 @@ def launch_job(args):
     gres = args.pop("gres")
     partition = args.pop("partition")
     codeloc = resolve_path(args.pop("codeloc"))
+    env = args.pop("env")
 
     gen_args = " ".join([f"--{k}={v}" for k, v in args.items()])
 
@@ -53,6 +55,7 @@ def launch_job(args):
         codeloc=codeloc,
         rundir=str(rundir),
         gen_args=gen_args,
+        env=env,
     )
     Path("./sbatchs").mkdir(exist_ok=True)
     fname = Path(f"./sbatchs/{now()}.sh").resolve()
@@ -77,6 +80,7 @@ if __name__ == "__main__":
     parser.add_argument("--gres", type=str, default="gpu:rtx8000:1")
     parser.add_argument("--codeloc", type=str, default=".")
     parser.add_argument("--rundir", type=str, default="$SCRATCH/mooc/sd")
+    parser.add_argument("--env", type=str, default="stable-diffusion-2.1")
     parser.add_argument("--launch", action="store_true", default=False)
     parser.add_argument("--prompt_file", type=str, default="prompts/victor.yaml")
     parser.add_argument("--height", type=int, default=1024)
@@ -116,6 +120,7 @@ if __name__ == "__main__":
             num_images_per_prompt=8,
         ).images
         print("Generating:", prompt)
+        print("In:", str(rundir / name))
         (rundir / name / "prompt.txt").write_text(prompt)
         for i, im in enumerate(ims):
             print(i, end="\r")
