@@ -121,6 +121,8 @@ if __name__ == "__main__":
         ).images
         print("Generating:", prompt)
         print("In:", str(rundir / name))
+        prompt_path = rundir / name / "prompt.txt"
+        prompt_path.parent.mkdir(parents=True, exist_ok=True)
         (rundir / name / "prompt.txt").write_text(prompt)
         for i, im in enumerate(ims):
             print(i, end="\r")
