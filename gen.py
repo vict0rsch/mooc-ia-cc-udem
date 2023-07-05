@@ -10,7 +10,7 @@ template = dedent(
     """\
 #!/bin/bash
 #SBATCH --job-name=mooc-sd
-#SBATCH --output={rundir}/output.out
+#SBATCH --output={rundir}/%j.out
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=16G
 #SBATCH --partition={partition}
