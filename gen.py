@@ -37,7 +37,7 @@ def resolve_path(path, to_str=False):
     return path
 
 
-def launch_job(args):
+def launch_job(args: dict):
     rundir = resolve_path(args.get("rundir"))
     gres = args.pop("gres")
     partition = args.pop("partition")
@@ -46,7 +46,7 @@ def launch_job(args):
 
     gen_args = " ".join([f"--{k}={v}" for k, v in args.items()])
 
-    rundir = resolve_path(args.rundir)
+    rundir = resolve_path(args["rundir"])
     rundir.mkdir(parents=True, exist_ok=True)
 
     sbatch_str = template.format(
@@ -66,8 +66,8 @@ def launch_job(args):
 
 def save_im(im, name, prompt, base_dir="./mooc-images/"):
     o = Path(base_dir)
-    o.mkdir(exist_ok=True, parents=True)
     im_out = o / f"{name}.png"
+    im_out.parent.mkdir(parents=True, exist_ok=True)
     prompt_out = o / f"{name}.txt"
     im.save(str(im_out))
     prompt_out.write_text(prompt)
