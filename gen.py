@@ -16,6 +16,8 @@ template = dedent(
 #SBATCH --partition={partition}
 #SBATCH --gres={gres}
 
+# command: {command}
+
 module load anaconda/3 cuda/11.7
 conda activate {env}
 
@@ -56,6 +58,7 @@ def launch_job(args: dict):
         rundir=str(rundir),
         gen_args=gen_args,
         env=env,
+        command=" ".join(sys.argv),
     )
     Path("./sbatchs").mkdir(exist_ok=True)
     fname = Path(f"./sbatchs/{now()}.sh").resolve()
