@@ -16,7 +16,7 @@ template = dedent(
 #SBATCH --partition={partition}
 #SBATCH --gres={gres}
 
-module load anaconda3 cuda/11.7
+module load anaconda/3 cuda/11.7
 conda activate {env}
 
 cd {codeloc}
